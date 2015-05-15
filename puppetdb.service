@@ -1,0 +1,19 @@
+[Unit]
+Description=PuppetDB
+After=puppetdb-data.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker kill %p
+ExecStartPre=-/usr/bin/docker rm -f %p
+ExecStartPre=/usr/bin/docker pull groob/puppetdb:latest
+ExecStart=/usr/bin/docker run --rm --name %p \
+  -p 127.0.0.1:8080:8080 \
+  --volumes-from puppetdb-data \
+  groob/puppetdb:latest
+ExecStop=-/usr/bin/docker stop %p
+
+[Install]
+WantedBy=multi-user.target

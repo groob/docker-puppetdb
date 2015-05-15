@@ -1,0 +1,10 @@
+[Unit]
+Description=PuppetDB Data Container
+Requires=docker.service
+
+[Service]
+ExecStartPre=/usr/bin/docker pull busybox
+ExecStart=-/usr/bin/docker create -v /var/lib/puppetdb/db --name %p busybox /bin/true
+
+[Install]
+WantedBy=multi-user.target
